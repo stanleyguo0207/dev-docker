@@ -4,6 +4,9 @@ FROM rockylinux:8.5.20220308
 # expose port
 EXPOSE 22
 
+# tools
+COPY tools /root/tools
+
 # replace repo
 RUN sed -e 's|^mirrorlist=|#mirrorlist=|g' \
 	-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g' \
@@ -20,14 +23,26 @@ dnf update -y
 RUN dnf install -y gcc-toolset-11-gcc gcc-toolset-11-gcc-c++ gcc-toolset-11-libstdc++-devel \
 gcc-toolset-11-gdb gcc-toolset-11-gcc-gdb-plugin gcc-toolset-11-make \
 gcc-toolset-11-valgrind gcc-toolset-11-strace gcc-toolset-11-ltrace \
-gcc-toolset-11-libasan-devel gcc-toolset-11-libtsan-devel \
+gcc-toolset-11-libasan-devel gcc-toolset-11-libtsan-devel llvm-toolset \
 git cmake autoconf automake mariadb-server mariadb-devel \
 openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
-vim python39 python39-devel openldap-devel \
-passwd tmux htop bzip2 net-tools vim rsync tar zip unzip lrzsz perf lsof telnet graphviz
+wget vim python39 python39-devel openldap-devel \
+passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz
 
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
+
+# tools
+RUN mv -f /root/tools/ninja /bin/ninja &&\
+chmod 755 /bin/ninja &&\
+chown root:root /bin/ninja
+
+# pip3
+RUN ln -s /bin/pip3 /bin/pip &&\
+pip install ranger-fm
+
+# remove
+RUN rm -rf /root/tools
 
 # local time
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
@@ -36,5 +51,6 @@ sed -e 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' \
     -e 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' \
     -i /etc/ssh/sshd_config &&\
 # gcc-toolset-11
-sed -e '/# You might want/i\ \ source\ \/opt\/rh\/gcc-toolset-11\/enable' \
+sed -e '/# You might want/i\    source opt/rh/gcc-toolset-11/enable' \
     -i /etc/bashrc
+    
