@@ -42,7 +42,7 @@ systemctl start docker
 systemctl enable docker
 echo "docker install is done !"
 
-dnf install -y git
+dnf install -y git git-lfs
 
 # git config
 git config --global user.name stanleyguo0207
