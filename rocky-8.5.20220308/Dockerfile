@@ -36,7 +36,7 @@ COPY tools /root/tools
 RUN mv -f /root/tools/ninja /bin/ninja &&\
 chmod 755 /bin/ninja &&\
 chown root:root /bin/ninja &&\
-tar -Jxf /root/tools/ccls.tar.xz -C /opt/
+tar -Jxf /root/tools/ccls.tar.xz -C /opt/ &&\
 tar -Jxf /root/tools/llvm-project-13.0.1.tar.xz -C /opt/
 
 # pip3
