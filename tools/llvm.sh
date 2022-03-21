@@ -1,0 +1,31 @@
+cmake \
+    -Hllvm \
+    -BRelease \
+    -G Ninja \
+    -D CMAKE_C_COMPILER=/opt/rh/gcc-toolset-11/root/usr/bin/cc \
+    -D CMAKE_CXX_COMPILER=/opt/rh/gcc-toolset-11/root/usr/bin/c++ \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/opt/llvm13-toolchain \
+    -D LLVM_TARGETS_TO_BUILD=X86 \
+    -D LLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb" \
+    -D LLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind" \
+    -D LLVM_BUILD_LLVM_DYLIB=Off \
+    -D LLVM_ENABLE_WARNINGS=Off \
+    -D LLVM_INCLUDE_TOOLS=On \
+    -D LLVM_BUILD_TOOLS=On \
+    -D LLVM_INCLUDE_BENCHMARKS=Off \
+    -D LLVM_INSTALL_BINUTILS_SYMLINKS=On \
+    -D LLVM_INSTALL_CCTOOLS_SYMLINKS=On \
+    -D LLVM_APPEND_VC_REV=On \
+    -D LLVM_ENABLE_THREADS=On \
+    -D LLVM_ENABLE_LTO=On \
+    -D LLVM_ENABLE_BINDINGS=Off \
+    -D LLVM_BUILD_32_BITS=Off \
+    -D CLANG_DEFAULT_LINKER=lld \
+    -D CLANG_DEFAULT_CXX_STDLIB=libc++ \
+    -D CLANG_DEFAULT_RTLIB=compiler-rt \
+    -D LIBCXX_USE_COMPILER_RT=On \
+    -D LIBCXXABI_USE_COMPILER_RT=On \
+    -D LIBCXXABI_USE_LLVM_UNWINDER=On
+
+cd Release && ninja -j12

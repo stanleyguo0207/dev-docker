@@ -4,9 +4,6 @@ FROM rockylinux:8.5.20220308
 # expose port
 EXPOSE 22
 
-# tools
-COPY tools /root/tools
-
 # replace repo
 RUN sed -e 's|^mirrorlist=|#mirrorlist=|g' \
 	-e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g' \
@@ -23,7 +20,7 @@ dnf update -y
 RUN dnf install -y gcc-toolset-11-gcc gcc-toolset-11-gcc-c++ gcc-toolset-11-libstdc++-devel \
 gcc-toolset-11-gdb gcc-toolset-11-gcc-gdb-plugin gcc-toolset-11-make \
 gcc-toolset-11-valgrind gcc-toolset-11-strace gcc-toolset-11-ltrace \
-gcc-toolset-11-libasan-devel gcc-toolset-11-libtsan-devel llvm-toolset \
+gcc-toolset-11-libasan-devel gcc-toolset-11-libtsan-devel \
 git cmake autoconf automake mariadb-server mariadb-devel \
 openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
@@ -33,9 +30,14 @@ passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet g
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
 
 # tools
+COPY tools /root/tools
+
+# tools
 RUN mv -f /root/tools/ninja /bin/ninja &&\
 chmod 755 /bin/ninja &&\
-chown root:root /bin/ninja
+chown root:root /bin/ninja &&\
+tar -Jxf /root/tools/ccls.tar.xz -C /opt/
+tar -Jxf /root/tools/llvm-project-13.0.1.tar.xz -C /opt/
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\

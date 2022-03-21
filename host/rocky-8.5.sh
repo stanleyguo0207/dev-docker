@@ -13,7 +13,13 @@ nmcli connection reload
 ifdown ens160
 ifup ens160
 echo "ifcfg modification is done !"
-	
+
+sed -e '/# End of file/i\* soft nproc 65535' \
+	-e '/# End of file/i\* hard nproc 65535' \
+	-e '/# End of file/i\* soft nofile 6553500' \
+	-e '/# End of file/i\* soft nofile 6553500' \
+	-i /etc/security/limits.conf
+
 hostnamectl set-hostname stanleyguo0207
 sed -i '$a192.168.200.201\tstanleyguo0207' \
 	/etc/hosts
