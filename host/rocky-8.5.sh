@@ -37,12 +37,17 @@ dnf config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/
 sed -i 's+download.docker.com+mirrors.aliyun.com/docker-ce+' \
 	/etc/yum.repos.d/docker-ce.repo
 dnf update -y
-dnf install -y docker-ce
+dnf install -y git git-lfs chrony docker-ce
+systemctl start chronyd
+systemctl enable chronyd
+sed -e 's|pool 2.|# pool 2.|g' \
+	-e '/# pool 2./a\server ntp.aliyun.com iburst' \
+	-e '/# pool 2./a\server cn.ntp.org.cn iburst' \
+	-i /etc/chrony.conf
+systemctl restart chronyd.service
 systemctl start docker
 systemctl enable docker
 echo "docker install is done !"
-
-dnf install -y git git-lfs
 
 # git config
 git config --global user.name stanleyguo0207
