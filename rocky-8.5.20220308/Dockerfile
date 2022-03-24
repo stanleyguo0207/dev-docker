@@ -26,6 +26,7 @@ openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
 wget vim python39 python39-devel openldap-devel \
 passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz
+# scl enable gcc-toolset-11 bash
 
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
 
@@ -36,8 +37,13 @@ COPY tools /root/tools
 RUN mv -f /root/tools/ninja /bin/ninja &&\
 chmod 755 /bin/ninja &&\
 chown root:root /bin/ninja &&\
-tar -Jxf /root/tools/ccls.tar.xz -C /opt/ &&\
-tar -Jxf /root/tools/llvm-project-13.0.1.tar.xz -C /opt/
+tar -Jxf /root/tools/ccls.tar.xz -C /opt/
+# mkdir /usr/lib/x86_64-linux-gnu &&\
+# ln -s /lib64/libtinfo.so.6 /lib64/libtinfo.so.5 &&\
+# ln -s /lib64/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so &&\
+# cd /opt/ccls &&\
+# cmake -H. -BRelease -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/llvm-toolset &&\
+# cmake --build Release -j12 --target install
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
