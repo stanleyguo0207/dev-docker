@@ -17,16 +17,13 @@ dnf makecache &&\
 dnf update -y
 
 # development tools
-RUN dnf install -y gcc-toolset-11-gcc gcc-toolset-11-gcc-c++ gcc-toolset-11-libstdc++-devel \
-gcc-toolset-11-gdb gcc-toolset-11-gcc-gdb-plugin gcc-toolset-11-make \
-gcc-toolset-11-valgrind gcc-toolset-11-strace gcc-toolset-11-ltrace \
-gcc-toolset-11-libasan-devel gcc-toolset-11-libtsan-devel \
+RUN dnf install -y gcc-toolset-11 llvm-toolset llvm-devel clang-devel \
 git git-lfs cmake autoconf automake mariadb-server mariadb-devel \
 openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
 wget vim python39 python39-devel openldap-devel \
-passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz
-# scl enable gcc-toolset-11 bash
+passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz &&\
+git lfs install
 
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
 
@@ -37,13 +34,20 @@ COPY tools /root/tools
 RUN mv -f /root/tools/ninja /bin/ninja &&\
 chmod 755 /bin/ninja &&\
 chown root:root /bin/ninja &&\
-tar -Jxf /root/tools/ccls.tar.xz -C /opt/
-# mkdir /usr/lib/x86_64-linux-gnu &&\
-# ln -s /lib64/libtinfo.so.6 /lib64/libtinfo.so.5 &&\
-# ln -s /lib64/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so &&\
-# cd /opt/ccls &&\
-# cmake -H. -BRelease -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/llvm-toolset &&\
-# cmake --build Release -j12 --target install
+tar -Jxf /root/tools/ccls.tar.xz -C /opt/ &&\
+# ccls
+cd /opt/ccls &&\
+cmake \
+    -H. \
+    -BRelease \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CXX_COMPILER=clang++ \
+    -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld \
+    -DCMAKE_PREFIX_PATH=/usr &&\
+cmake --build Release --parallel &&\
+cmake --install Release &&\
+rm -rf /opt/ccls
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
@@ -59,6 +63,5 @@ sed -e 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' \
     -e 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' \
     -i /etc/ssh/sshd_config &&\
 # gcc-toolset-11
-sed -e '/# You might want/i\    source opt/rh/gcc-toolset-11/enable' \
+sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
     -i /etc/bashrc
-    

@@ -29,6 +29,19 @@ cmake \
     -DLLVM_ENABLE_WARNINGS=OFF
     # -DLLVM_ENABLE_RUNTIMES="compiler-rt;libc;libcxx;libcxxabi;libunwind" \
 
+cmake \
+    -Hllvm \
+    -BRelease \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DLLVM_TARGETS_TO_BUILD=X86 \
+    -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/opt/rh/gcc-toolset-11/root/usr/lib64 -L/opt/rh/gcc-toolset-11/root/usr/lib64" \
+    -DLLVM_ENABLE_PROJECTS="clang;libc;libclc;lld;lldb" \
+    -DLLVM_ENABLE_LLD=on \
+    -DBUILD_SHARED_LIBS=on
+    # -DCMAKE_INSTALL_PREFIX=/opt/llvm-toolset/ \
+    # -DLLVM_ENABLE_PROJECTS=clang \
+
 cmake --build Release --parallel
 cmake --install Release
 ```
