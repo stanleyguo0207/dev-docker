@@ -21,8 +21,20 @@ sed -e '/# End of file/i\* soft nproc 65535' \
 	-i /etc/security/limits.conf
 
 hostnamectl set-hostname stanleyguo0207
-sed -i '$a192.168.200.201\tstanleyguo0207' \
-	/etc/hosts
+sed -e '$a192.168.200.201\tstanleyguo0207' \
+	-e "$a140.82.112.3"\t"github.com" \
+	-e "$a140.82.114.5"\t"api.github.com" \
+	-e "$a185.199.108.153"\t"github.io" \
+	-e "$a185.199.108.133"\t"raw.github.com" \
+	-e "$a185.199.108.133"\t"raw.githubusercontent.com" \
+	-e "$a185.199.109.133"\t"raw.githubusercontent.com" \
+	-e "$a185.199.110.133"\t"raw.githubusercontent.com" \
+	-e "$a185.199.111.133"\t"raw.githubusercontent.com" \
+	-e "$a2606:50c0:8000::154"\t"raw.githubusercontent.com" \
+	-e "$a2606:50c0:8001::154"\t"raw.githubusercontent.com" \
+	-e "$a2606:50c0:8002::154"\t"raw.githubusercontent.com" \
+	-e "$a2606:50c0:8003::154"\t"raw.githubusercontent.com" \
+	-i /etc/hosts
 echo "hostname modification is done !"
 
 sed -e 's|^mirrorlist=|#mirrorlist=|g' \
@@ -37,7 +49,7 @@ dnf config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/
 sed -i 's+download.docker.com+mirrors.aliyun.com/docker-ce+' \
 	/etc/yum.repos.d/docker-ce.repo
 dnf update -y
-dnf install -y git git-lfs chrony docker-ce
+dnf install -y git git-lfs chrony docker-ce zsh
 systemctl start chronyd
 systemctl enable chronyd
 sed -e 's|pool 2.|# pool 2.|g' \
@@ -56,3 +68,8 @@ git config --global core.editor vi
 ssh-keygen -t rsa -C stanleyguo0207@163.com
 git clone git@github.com:stanleyguo0207/dev-docker.git /root/dev-docker
 git config --global commit.template /root/dev-docker/commit.template
+
+# oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+sed 's|^ZSH_THEME=".*$|ZSH_THEME="powerlevel10k\/powerlevel10k"|' -i /root/.zshrc
