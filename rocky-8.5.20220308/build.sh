@@ -7,6 +7,7 @@ then
 fi
 
 docker login
+docker pull hello-world:latest
 docker pull rockylinux:8.5.20220308
 docker build --network=host --no-cache -f Dockerfile -t $1 ../
 
