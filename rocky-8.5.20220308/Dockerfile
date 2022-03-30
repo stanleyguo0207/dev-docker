@@ -4,6 +4,8 @@ FROM rockylinux:8.5.20220308
 # expose port
 EXPOSE 22
 
+WORKDIR /root
+
 # replace repo
 RUN sed -e 's|^mirrorlist=|#mirrorlist=|g' \
 	    -e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g' \
@@ -23,7 +25,8 @@ openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
 wget vim zsh python39 python39-devel openldap-devel util-linux-user sudo \
 passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz &&\
-git lfs install
+git lfs install &&\
+chsh -s /bin/zsh
 
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
 
@@ -49,13 +52,8 @@ COPY tools /root/tools
 RUN mv -f /root/tools/ninja /bin/ninja &&\
 chmod 755 /bin/ninja &&\
 chown root:root /bin/ninja &&\
-# oh-my-zsh
-cp /root/tools/omz.sh /root/ &&\
-mkdir -p /root/omz/ &&\
-tar -Jxf /root/tools/powerlevel10k.tar.xz -C /root/omz/ &&\
-tar -Jxf /root/tools/omz_plugins.tar.xz -C /root/omz/ &&\
 # fonts
-tar -Jxf /root/tools/fonts.tar.xz -C /root/tools/ &&\
+tar -Jxf /root/tools/fonts-linux.tar.xz -C /root/tools/ &&\
 /root/tools/fonts/install.sh &&\
 mkdir -p /root/.config/fontconfig/conf.d &&\
 cp /root/tools/50-enable-terminess-powerline.conf /root/.config/fontconfig/conf.d/ &&\
@@ -75,12 +73,16 @@ cmake --build Release --parallel &&\
 cmake --install Release &&\
 rm -rf /opt/ccls
 
+# oh-my-zsh
+RUN mkdir -p /root/omz/ &&\
+tar -Jxf /root/tools/omz.tar.xz -C /root/omz/ &&\
+/root/omz/omz.sh
+
+WORKDIR /root
+
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
 pip install ranger-fm
-
-# remove
-RUN rm -rf /root/tools
 
 # local time
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
@@ -90,4 +92,10 @@ sed -e 's|GSSAPIAuthentication yes|GSSAPIAuthentication no|g' \
     -i /etc/ssh/sshd_config &&\
 # gcc-toolset-11
 sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
+    -e '/# You might want/i\    source /root/.zshrc' \
     -i /etc/bashrc
+
+# clean
+RUN rm -rf /root/tools &&\
+    rm -rf /root/omz &&\
+    rm -f /root/omz_install.sh
