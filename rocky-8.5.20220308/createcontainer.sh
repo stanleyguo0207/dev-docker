@@ -23,8 +23,9 @@ function CreateContainer(){
     docker create --name "$1" --volumes-from "$1"_dvc -p "$2":22  --security-opt seccomp=unconfined --privileged=true $ImageName /usr/sbin/init
     docker start $1
     docker cp $ScriptDir/createuser.sh $1:/root
-    docker exec -it $1 /bin/zsh /root/createuser.sh $3 $4
+    docker exec -i $1 /bin/bash /root/createuser.sh $3 $4
     echo "create root:root & "$3:$3" two accounts for container $1"
+    docker exec -it -u stanley $1 /bin/zsh /opt/docker_home/omz/omz.sh "/opt/docker_home"
 }
 
 ContainerName=$1
@@ -34,4 +35,4 @@ UserId=$4
 
 CreateContainer $ContainerName $Port $UserName $UserId
 
-# ./createcontainer.sh dev01 9901 stanleyguo0207 10001
+# ./createcontainer.sh dev01 9901 stanley 10001

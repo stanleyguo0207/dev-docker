@@ -25,8 +25,7 @@ openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
 wget vim zsh python39 python39-devel openldap-devel util-linux-user sudo \
 passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz &&\
-git lfs install &&\
-chsh -s /bin/zsh
+git lfs install
 
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
 
@@ -81,14 +80,9 @@ cmake \
     -DCMAKE_PREFIX_PATH=/usr &&\
 cmake --build Release --parallel &&\
 cmake --install Release &&\
-rm -rf /opt/ccls
-
-# oh-my-zsh
-RUN mkdir -p /root/omz/ &&\
-tar -Jxf /root/tools/omz.tar.xz -C /root/omz/ &&\
-/root/omz/omz.sh
-
-WORKDIR /root
+rm -rf /opt/ccls &&\
+# omz
+mv /root/tools/omz.tar.xz /opt/
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
@@ -102,10 +96,8 @@ sed -e 's|GSSAPIAuthentication yes|GSSAPIAuthentication no|g' \
     -i /etc/ssh/sshd_config &&\
 # gcc-toolset-11
 sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
-    -e '/# You might want/i\    source /root/.zshrc' \
+    # -e '/# You might want/i\    source /root/.zshrc' \
     -i /etc/bashrc
 
 # clean
-RUN rm -rf /root/tools &&\
-    rm -rf /root/omz &&\
-    rm -f /root/omz_install.sh
+RUN rm -rf /root/tools
