@@ -25,7 +25,10 @@ function CreateContainer(){
     docker cp $ScriptDir/createuser.sh $1:/root
     docker exec -i $1 /bin/bash /root/createuser.sh $3 $4
     echo "create root:root & "$3:$3" two accounts for container $1"
-    docker exec -it -u stanley $1 /bin/zsh /opt/docker_home/omz/omz.sh "/opt/docker_home"
+    docker exec -i -u stanley $1 /bin/zsh /opt/docker_home/omz/omz.sh "/opt/docker_home"
+    docker cp $ScriptDir/.p10k.zsh $1:/opt/docker_home
+    docker cp $ScriptDir/.zshrc $1:/opt/docker_home
+    docker exec -it -u stanley $1 /bin/zsh
 }
 
 ContainerName=$1
