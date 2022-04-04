@@ -49,7 +49,7 @@ dnf config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/
 sed -i 's+download.docker.com+mirrors.aliyun.com/docker-ce+' \
 	/etc/yum.repos.d/docker-ce.repo
 dnf update -y
-dnf install -y git git-lfs chrony docker-ce zsh
+dnf install -y git git-lfs chrony docker-ce zsh net-tools
 systemctl start chronyd
 systemctl enable chronyd
 sed -e 's|pool 2.|# pool 2.|g' \

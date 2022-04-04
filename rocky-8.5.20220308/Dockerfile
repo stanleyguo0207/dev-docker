@@ -25,7 +25,8 @@ openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium \
 wget vim zsh python39 python39-devel openldap-devel util-linux-user sudo \
 passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz &&\
-git lfs install
+git lfs install &&\
+chsh -s /bin/zsh
 
 RUN dnf --enablerepo=powertools install -y texinfo doxygen
 
@@ -54,21 +55,23 @@ RUN echo "140.82.112.3"$'\t'"github.com" \
          $'\n'"2606:50c0:8003::153"$'\t'"assets-cdn.github.com" \
          >> /etc/hosts
 
-# tools
-COPY tools /root/tools
+# ninja
+COPY tools/ninja /bin/ninja
+RUN chmod 755 /bin/ninja &&\
+chown root:root /bin/ninja
 
-# tools
-RUN mv -f /root/tools/ninja /bin/ninja &&\
-chmod 755 /bin/ninja &&\
-chown root:root /bin/ninja &&\
 # fonts
-tar -Jxf /root/tools/fonts-linux.tar.xz -C /root/tools/ &&\
+COPY tools/fonts-linux.tar.xz /root/tools/
+COPY tools/50-enable-terminess-powerline.conf /root/tools/
+RUN tar -Jxf /root/tools/fonts-linux.tar.xz -C /root/tools/ &&\
 /root/tools/fonts/install.sh &&\
 mkdir -p /root/.config/fontconfig/conf.d &&\
 cp /root/tools/50-enable-terminess-powerline.conf /root/.config/fontconfig/conf.d/ &&\
-fc-cache -vf ~/.local/share/fonts/ &&\
+fc-cache -vf ~/.local/share/fonts/
+
 # ccls
-tar -Jxf /root/tools/ccls.tar.xz -C /opt/ &&\
+COPY tools/ccls.tar.xz /root/tools/
+RUN tar -Jxf /root/tools/ccls.tar.xz -C /opt/ &&\
 cd /opt/ccls &&\
 cmake \
     -H. \
@@ -80,9 +83,7 @@ cmake \
     -DCMAKE_PREFIX_PATH=/usr &&\
 cmake --build Release --parallel &&\
 cmake --install Release &&\
-rm -rf /opt/ccls &&\
-# omz
-mv /root/tools/omz.tar.xz /opt/
+rm -rf /opt/ccls
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
@@ -96,8 +97,23 @@ sed -e 's|GSSAPIAuthentication yes|GSSAPIAuthentication no|g' \
     -i /etc/ssh/sshd_config &&\
 # gcc-toolset-11
 sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
-    # -e '/# You might want/i\    source /root/.zshrc' \
+    -e '/# You might want/i\    source /root/.zshrc' \
     -i /etc/bashrc
+
+# oh-my-zsh
+COPY tools/omz.tar.xz /root/tools/
+RUN /bin/zsh &&\
+tar -Jxf /root/tools/omz.tar.xz -C /root/tools/ &&\
+/root/tools/omz/omz.sh "/root" &&\
+cp /root/tools/omz/.p10k.zsh /root &&\
+cp /root/tools/omz/.zshrc /root
+
+# root passwd
+RUN echo "root" | passwd --stdin root
+
+# ssh
+RUN mkdir -p /root/.ssh &&\
+echo "" >> /root/.ssh/authorized_keys
 
 # clean
 RUN rm -rf /root/tools
