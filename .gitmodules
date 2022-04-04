@@ -1,0 +1,9 @@
+[submodule "tools/ccls"]
+	path = tools/ccls
+	url = https://gitee.com/stanleyguo0207/ccls.git
+[submodule "tools/fonts-linux"]
+	path = tools/fonts-linux
+	url = https://gitee.com/stanleyguo0207/fonts-linux.git
+[submodule "tools/omz"]
+	path = tools/omz
+	url = https://gitee.com/stanleyguo0207/omz.git

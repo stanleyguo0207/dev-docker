@@ -60,19 +60,17 @@ COPY tools/ninja /bin/ninja
 RUN chmod 755 /bin/ninja &&\
 chown root:root /bin/ninja
 
-# fonts
-COPY tools/fonts-linux.tar.xz /root/tools/
+# fonts-linux
+COPY tools/fonts-linux /root/tools/fonts-linux
 COPY tools/50-enable-terminess-powerline.conf /root/tools/
-RUN tar -Jxf /root/tools/fonts-linux.tar.xz -C /root/tools/ &&\
-/root/tools/fonts/install.sh &&\
+RUN /root/tools/fonts-linux/install.sh &&\
 mkdir -p /root/.config/fontconfig/conf.d &&\
 cp /root/tools/50-enable-terminess-powerline.conf /root/.config/fontconfig/conf.d/ &&\
-fc-cache -vf ~/.local/share/fonts/
+fc-cache -vf ~/.local/share/fonts-linux/
 
 # ccls
-COPY tools/ccls.tar.xz /root/tools/
-RUN tar -Jxf /root/tools/ccls.tar.xz -C /opt/ &&\
-cd /opt/ccls &&\
+COPY tools/ccls /root/tools/ccls
+RUN cd /root/tools/ccls &&\
 cmake \
     -H. \
     -BRelease \
@@ -82,8 +80,7 @@ cmake \
     -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld \
     -DCMAKE_PREFIX_PATH=/usr &&\
 cmake --build Release --parallel &&\
-cmake --install Release &&\
-rm -rf /opt/ccls
+cmake --install Release
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
@@ -101,9 +98,8 @@ sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
     -i /etc/bashrc
 
 # oh-my-zsh
-COPY tools/omz.tar.xz /root/tools/
+COPY tools/omz /root/tools/omz
 RUN /bin/zsh &&\
-tar -Jxf /root/tools/omz.tar.xz -C /root/tools/ &&\
 /root/tools/omz/omz.sh "/root" &&\
 cp /root/tools/omz/.p10k.zsh /root &&\
 cp /root/tools/omz/.zshrc /root
