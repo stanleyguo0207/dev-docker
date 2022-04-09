@@ -20,7 +20,7 @@ fi
 
 function CreateContainer(){
     docker create --name "$1"_dvc -v /opt/docker_home hello-world:latest
-    docker create --name "$1" --volumes-from "$1"_dvc -p "$2":22  --security-opt seccomp=unconfined --privileged=true $ImageName /usr/sbin/init
+    docker create --name "$1" --volumes-from "$1"_dvc -p "$2":22  --security-opt seccomp=unconfined --privileged=true --restart=always $ImageName /usr/sbin/init
     docker start $1
     docker exec -it $1 /bin/zsh
     echo "create root:root accounts for container $1 port:$2"

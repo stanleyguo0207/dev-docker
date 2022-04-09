@@ -55,6 +55,24 @@ RUN echo "140.82.112.3"$'\t'"github.com" \
          $'\n'"2606:50c0:8003::153"$'\t'"assets-cdn.github.com" \
          >> /etc/hosts
 
+# ulimit
+RUN echo "*"$'\t'"soft"$'\t'"core"$'\t'"unlimited" \
+         $'\n'"*"$'\t'"hard"$'\t'"core"$'\t'"unlimited" \
+         $'\n'"*"$'\t'"soft"$'\t'"nofile"$'\t'"1048576" \
+         $'\n'"*"$'\t'"hard"$'\t'"nofile"$'\t'"1048576" \
+         $'\n'"*"$'\t'"soft"$'\t'"nproc"$'\t'"102400" \
+         $'\n'"*"$'\t'"hard"$'\t'"nproc"$'\t'"102400" \
+         $'\n'"root*"$'\t'"soft"$'\t'"core"$'\t'"unlimited" \
+         $'\n'"root*"$'\t'"hard"$'\t'"core"$'\t'"unlimited" \
+         $'\n'"root*"$'\t'"soft"$'\t'"nofile"$'\t'"1048576" \
+         $'\n'"root*"$'\t'"hard"$'\t'"nofile"$'\t'"1048576" \
+         $'\n'"root*"$'\t'"soft"$'\t'"nproc"$'\t'"102400" \
+         $'\n'"root*"$'\t'"hard"$'\t'"nproc"$'\t'"102400" \
+         >> /etc/security/limits.conf
+
+# core_pattern
+# RUN echo "core-%e-%p-%t" > /proc/sys/kernel/core_pattern
+
 # ninja
 COPY tools/ninja /bin/ninja
 RUN chmod 755 /bin/ninja &&\

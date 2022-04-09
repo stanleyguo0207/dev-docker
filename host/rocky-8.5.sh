@@ -14,27 +14,50 @@ ifdown ens160
 ifup ens160
 echo "ifcfg modification is done !"
 
-sed -e '/# End of file/i\* soft nproc 65535' \
-	-e '/# End of file/i\* hard nproc 65535' \
-	-e '/# End of file/i\* soft nofile 6553500' \
-	-e '/# End of file/i\* soft nofile 6553500' \
+sed -e '$a*\tsoft\tcore\tunlimited' \
+	-e '$a*\thard\tcore\tunlimited' \
+	-e '$a*\tsoft\tnofile\t1048576' \
+	-e '$a*\thard\tnofile\t1048576' \
+	-e '$a*\tsoft\tnproc\t102400' \
+	-e '$a*\thard\tnproc\t102400' \
+	-e '$root*\tsoft\tcore\tunlimited' \
+	-e '$root*\thard\tcore\tunlimited' \
+	-e '$root*\tsoft\tnofile\t1048576' \
+	-e '$root*\thard\tnofile\t1048576' \
+	-e '$root*\tsoft\tnproc\t102400' \
+	-e '$root*\thard\tnproc\t102400' \
 	-i /etc/security/limits.conf
+echo "ulimit modification is done !"
+
+echo "core-%e-%p-%t" > /proc/sys/kernel/core_pattern
+echo "core_pattern modification is done !"
+
+sed -e '$a140.82.112.3\tgithub.com' \
+	-e '$a140.82.113.3\tgithub.com' \
+	-e '$a140.82.114.5\tapi.github.com' \
+	-e '$a185.199.108.153\tgithub.io' \
+	-e '$a199.232.69.194\tgithub.global.ssl.fastly.net' \
+	-e '$a185.199.108.133\traw.github.com' \
+	-e '$a185.199.108.133\traw.githubusercontent.com' \
+	-e '$a185.199.109.133\traw.githubusercontent.com' \
+	-e '$a185.199.110.133\traw.githubusercontent.com' \
+	-e '$a185.199.111.133\traw.githubusercontent.com' \
+	-e '$a2606:50c0:8000::154\traw.githubusercontent.com' \
+	-e '$a2606:50c0:8001::154\traw.githubusercontent.com' \
+	-e '$a2606:50c0:8002::154\traw.githubusercontent.com' \
+	-e '$a2606:50c0:8003::154\traw.githubusercontent.com' \
+	-e '$a185.199.108.153\tassets-cdn.github.com' \
+	-e '$a185.199.109.153\tassets-cdn.github.com' \
+	-e '$a185.199.110.153\tassets-cdn.github.com' \
+	-e '$a185.199.111.153\tassets-cdn.github.com' \
+	-e '$a2606:50c0:8000::153\tassets-cdn.github.com' \
+	-e '$a2606:50c0:8001::153\tassets-cdn.github.com' \
+	-e '$a2606:50c0:8002::153\tassets-cdn.github.com' \
+	-e '$a2606:50c0:8003::153\tassets-cdn.github.com' \
+	-i /etc/hosts
+echo "hosts modification is done !"
 
 hostnamectl set-hostname stanleyguo0207
-sed -e '$a192.168.200.201\tstanleyguo0207' \
-	-e "$a140.82.112.3"\t"github.com" \
-	-e "$a140.82.114.5"\t"api.github.com" \
-	-e "$a185.199.108.153"\t"github.io" \
-	-e "$a185.199.108.133"\t"raw.github.com" \
-	-e "$a185.199.108.133"\t"raw.githubusercontent.com" \
-	-e "$a185.199.109.133"\t"raw.githubusercontent.com" \
-	-e "$a185.199.110.133"\t"raw.githubusercontent.com" \
-	-e "$a185.199.111.133"\t"raw.githubusercontent.com" \
-	-e "$a2606:50c0:8000::154"\t"raw.githubusercontent.com" \
-	-e "$a2606:50c0:8001::154"\t"raw.githubusercontent.com" \
-	-e "$a2606:50c0:8002::154"\t"raw.githubusercontent.com" \
-	-e "$a2606:50c0:8003::154"\t"raw.githubusercontent.com" \
-	-i /etc/hosts
 echo "hostname modification is done !"
 
 sed -e 's|^mirrorlist=|#mirrorlist=|g' \
