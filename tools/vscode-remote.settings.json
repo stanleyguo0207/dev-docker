@@ -1,0 +1,16 @@
+{
+    "ccls.launch.command": "/usr/local/bin/ccls",
+    "ccls.cache.directory": "/opt/docker_home/.cache/ccls-cache",
+    "ccls.misc.compilationDatabaseDirectory": "build",
+    "ccls.completion.detailedLabel": true,
+    "ccls.codeLens.enabled": true,
+    "ccls.clang.resourceDir": "/usr/lib64/clang/12.0.1",
+    "ccls.launch.args": [
+        "-log-file=/opt/docker_home/.cache/ccls_vscode.log",
+        "--init={\"capabilities\": {\"foldingRangeProvider\": false}}"
+    ],
+    "C_Cpp.autocomplete": "Disabled",
+    "C_Cpp.formatting": "Disabled",
+    "C_Cpp.errorSquiggles": "Disabled",
+    "C_Cpp.intelliSenseEngine": "Disabled"
+}
