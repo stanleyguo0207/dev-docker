@@ -70,9 +70,6 @@ RUN echo "*"$'\t'"soft"$'\t'"core"$'\t'"unlimited" \
          $'\n'"root*"$'\t'"hard"$'\t'"nproc"$'\t'"102400" \
          >> /etc/security/limits.conf
 
-# core_pattern
-# RUN echo "core-%e-%p-%t" > /proc/sys/kernel/core_pattern
-
 # ninja
 COPY tools/ninja /bin/ninja
 RUN chmod 755 /bin/ninja &&\
@@ -129,7 +126,7 @@ mv /root/tools/nodejs/install-npm.sh /opt/node
 COPY tools/vscode /opt/vscode
 
 # opt
-COPY tools/install-opt.sh /opt
+COPY tools/init_dev.sh /opt
 
 # local time
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
