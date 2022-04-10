@@ -22,8 +22,8 @@ dnf update -y
 RUN dnf install -y gcc-toolset-11 llvm-toolset llvm-devel clang-devel \
 git git-lfs cmake autoconf automake mariadb-server mariadb-devel \
 openssl openssh openssh-server openssh-clients \
-libuuid libuuid-devel libunwind libunwind-devel libsodium \
-wget vim zsh python39 python39-devel openldap-devel util-linux-user sudo \
+libuuid libuuid-devel libunwind libunwind-devel libsodium libX11-devel libXext-devel \
+wget vim neovim python3-neovim zsh python39 python39-devel openldap-devel util-linux-user sudo \
 passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz &&\
 git lfs install &&\
 chsh -s /bin/zsh
@@ -102,18 +102,7 @@ cmake --install Release
 
 # pip3
 RUN ln -s /bin/pip3 /bin/pip &&\
-pip install ranger-fm
-
-# local time
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
-# ssh config
-sed -e 's|GSSAPIAuthentication yes|GSSAPIAuthentication no|g' \
-    -e 's|#PubkeyAuthentication yes|PubkeyAuthentication yes|g' \
-    -i /etc/ssh/sshd_config &&\
-# gcc-toolset-11
-sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
-    -e '/# You might want/i\    source /root/.zshrc' \
-    -i /etc/bashrc
+pip install ranger-fm ueberzug pynvim
 
 # oh-my-zsh
 COPY tools/omz /root/tools/omz
@@ -128,6 +117,31 @@ RUN echo "root" | passwd --stdin root
 # ssh
 RUN mkdir -p /root/.ssh &&\
 echo "" >> /root/.ssh/authorized_keys
+
+# nodejs
+COPY tools/nodejs /root/tools/nodejs
+RUN tar -Jxf /root/tools/nodejs/node-v17.9.0-linux-x64.tar.xz -C /opt/ &&\
+mv /opt/node-v17.9.0-linux-x64 /opt/node &&\
+mv /root/tools/nodejs/enable /opt/node &&\
+mv /root/tools/nodejs/install-npm.sh /opt/node
+
+# vscode
+COPY tools/vscode /opt/vscode
+
+# opt
+COPY tools/install-opt.sh /opt
+
+# local time
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
+# ssh config
+sed -e 's|GSSAPIAuthentication yes|GSSAPIAuthentication no|g' \
+    -e 's|#PubkeyAuthentication yes|PubkeyAuthentication yes|g' \
+    -i /etc/ssh/sshd_config &&\
+# gcc-toolset-11
+sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
+    -e '/# You might want/i\    source /opt/node/enable' \
+    -e '/# You might want/i\    source /root/.zshrc' \
+    -i /etc/bashrc
 
 # clean
 RUN rm -rf /root/tools

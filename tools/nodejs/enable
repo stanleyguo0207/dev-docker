@@ -1,0 +1,2 @@
+export PATH=/opt/node/bin${PATH:+:${PATH}}
+export MANPATH=/opt/node/share/man:${MANPATH}
