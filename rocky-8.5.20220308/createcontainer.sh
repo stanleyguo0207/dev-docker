@@ -2,7 +2,14 @@
 
 ScriptFile=$0
 echo "script file: $ScriptFile"
-ImageName=dev_rocky:v8.5
+
+if [ $# != 3 ]
+then
+    echo "Usage: createcontainer.sh [image_name] [container_name] [port]"
+    exit 1
+fi
+
+ImageName="$1"
 
 if [ -L $0 ]
 then
@@ -12,23 +19,18 @@ else
 fi
 echo "script directory: $ScriptDir"
 
-if [ $# != 2 ]
-then
-    echo "Usage: createcontainer.sh [container_name] [port]"
-    exit 1
-fi
-
 function CreateContainer(){
-    docker create --name "$1"_dvc -v /opt/docker_home hello-world:latest
-    docker create --name "$1" --volumes-from "$1"_dvc -p "$2":22  --security-opt seccomp=unconfined --privileged=true --restart=always $ImageName /usr/sbin/init
-    docker start $1
-    docker exec -it $1 /bin/zsh
-    echo "create root:root accounts for container $1 port:$2"
+    docker create --name "$2"_dvc -v /opt/docker_home hello-world:latest
+    docker create --name "$2" --volumes-from "$2"_dvc -p "$3":22  --security-opt seccomp=unconfined --privileged=true --restart=always "$1" /usr/sbin/init
+    docker start $2
+    docker exec -it $2 /bin/zsh
+    echo "create root:root accounts for container $1 $2 port:$3"
 }
 
-ContainerName=$1
-Port=$2
+ContainerName=$2
+Port=$3
 
-CreateContainer $ContainerName $Port
+CreateContainer $ImageName $ContainerName $Port
 
-# ./createcontainer.sh dev01 9901
+# ./createcontainer.sh dev_rocky:v8.5 dev01 9901
+# ./createcontainer.sh dev_rocky_test:v8.5 dev02 9902

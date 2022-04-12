@@ -12,5 +12,8 @@
     "C_Cpp.autocomplete": "Disabled",
     "C_Cpp.formatting": "Disabled",
     "C_Cpp.errorSquiggles": "Disabled",
-    "C_Cpp.intelliSenseEngine": "Disabled"
+    "C_Cpp.intelliSenseEngine": "Disabled",
+    "cmake.configureArgs": [
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    ]
 }

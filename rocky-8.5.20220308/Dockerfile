@@ -19,7 +19,10 @@ dnf makecache &&\
 dnf update -y
 
 # development tools
-RUN dnf install -y gcc-toolset-11 llvm-toolset llvm-devel clang-devel \
+RUN dnf install -y gcc-toolset-11 gcc-toolset-11-libasan-devel gcc-toolset-11-libtsan-devel gcc-toolset-11-ltrace \
+gcc-toolset-11-gcc gcc-toolset-11-gcc-c++ gcc-toolset-11-gcc-gdb-plugin gcc-toolset-11-libstdc++-devel \
+gcc-toolset-11-perftools gcc-toolset-11-strace gcc-toolset-11-valgrind \
+llvm-toolset llvm-devel clang-devel \
 git git-lfs cmake autoconf automake mariadb-server mariadb-devel \
 openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium libX11-devel libXext-devel \
