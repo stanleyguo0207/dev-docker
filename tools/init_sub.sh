@@ -20,4 +20,6 @@ git submodule update --init
 
 # nodejs
 cd $ScriptDir/nodejs
+echo "nodejs IN"
+
 curl -O https://nodejs.org/download/release/v17.9.0/node-v17.9.0-linux-x64.tar.xz
