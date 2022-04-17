@@ -101,8 +101,7 @@ cmake --build Release --parallel &&\
 cmake --install Release
 
 # pip3
-RUN ln -s /bin/pip3 /bin/pip &&\
-pip install ranger-fm ueberzug pynvim
+RUN ln -s /bin/pip3 /bin/pip
 
 # oh-my-zsh
 COPY tools/omz /root/tools/omz
