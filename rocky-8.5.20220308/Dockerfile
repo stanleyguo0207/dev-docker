@@ -28,6 +28,7 @@ openssl openssh openssh-server openssh-clients \
 libuuid libuuid-devel libunwind libunwind-devel libsodium libX11-devel libXext-devel \
 wget vim neovim python3-neovim zsh python39 python39-devel openldap-devel util-linux-user sudo \
 passwd tmux htop net-tools rsync tar bzip2 xz zip unzip lrzsz perf lsof telnet graphviz &&\
+dnf module install -y nodejs:16 &&\
 git lfs install &&\
 chsh -s /bin/zsh
 
@@ -119,9 +120,7 @@ echo "" >> /root/.ssh/authorized_keys
 
 # nodejs
 COPY tools/nodejs /root/tools/nodejs
-RUN tar -Jxf /root/tools/nodejs/node-v17.9.0-linux-x64.tar.xz -C /opt/ &&\
-mv /opt/node-v17.9.0-linux-x64 /opt/node &&\
-mv /root/tools/nodejs/enable /opt/node &&\
+RUN mkdir -p /opt/node &&\
 mv /root/tools/nodejs/install-npm.sh /opt/node
 
 # vscode
@@ -138,7 +137,7 @@ sed -e 's|GSSAPIAuthentication yes|GSSAPIAuthentication no|g' \
     -i /etc/ssh/sshd_config &&\
 # gcc-toolset-11
 sed -e '/# You might want/i\    source /opt/rh/gcc-toolset-11/enable' \
-    -e '/# You might want/i\    source /opt/node/enable' \
+    # -e '/# You might want/i\    source /opt/node/enable' \
     -e '/# You might want/i\    source /root/.zshrc' \
     -i /etc/bashrc
 

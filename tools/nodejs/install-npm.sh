@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/zsh
+npm install -g cnpm --registry=https://registry.npmmirror.com
 
-npm i -g neovim
-npm i -g bash-language-server
-npm i -g instant-markdown-d
-npm i -g neovim
+cnpm i -g neovim
+cnpm i -g bash-language-server
+cnpm i -g instant-markdown-d
