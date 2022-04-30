@@ -11,6 +11,6 @@ code --install-extension --verbose yzhang.markdown-all-in-one
 code --install-extension --verbose bierner.markdown-preview-github-styles
 code --install-extension --verbose ms-python.python
 code --install-extension --verbose gruntfuggly.todo-tree
-code --install-extension --verbose bbenoist.togglehs
+code --install-extension --verbose ryzngard.vscode-header-source
 code --install-extension --verbose zxh404.vscode-proto3
 code --install-extension --verbose jeff-hykin.better-cpp-syntax
