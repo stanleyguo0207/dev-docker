@@ -74,6 +74,9 @@ RUN echo "*"$'\t'"soft"$'\t'"core"$'\t'"unlimited" \
          $'\n'"root*"$'\t'"hard"$'\t'"nproc"$'\t'"102400" \
          >> /etc/security/limits.conf
 
+# git
+COPY commit.template /root/.config/commit.template
+
 # ninja
 COPY tools/ninja /bin/ninja
 RUN chmod 755 /bin/ninja &&\

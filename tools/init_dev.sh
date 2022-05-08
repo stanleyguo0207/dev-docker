@@ -10,6 +10,11 @@ fi
 ScriptDir=`dirname $(readlink -f "$0")`
 echo "script directory: $ScriptDir"
 
+# git
+echo "git global config."
+git config --global core.editor vim
+git config --global commit.template /root/.config/commit.template
+
 # pip3
 echo "pip3 install package."
 pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/

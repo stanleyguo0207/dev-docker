@@ -3,6 +3,8 @@
 ScriptDir=`dirname $(readlink -f "$0")`
 echo "script directory: $ScriptDir"
 
+git submodule update --remote
+
 # ccls
 cd $ScriptDir/ccls
 echo "submodule ccls IN"
