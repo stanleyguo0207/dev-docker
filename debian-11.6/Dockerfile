@@ -7,6 +7,9 @@ EXPOSE 22
 # work directory /root
 WORKDIR /root
 
+SHELL ["/bin/bash", "-c"]
+RUN echo I am using bash, which is now the default
+
 RUN apt update
 RUN apt install -y vim wget curl apt-transport-https ca-certificates
 
