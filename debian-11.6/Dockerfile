@@ -11,7 +11,7 @@ SHELL ["/bin/bash", "-c"]
 RUN echo I am using bash, which is now the default
 
 RUN apt update
-RUN apt install -y vim wget curl apt-transport-https ca-certificates
+RUN apt install -y wget curl apt-transport-https ca-certificates
 
 # sources.list
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
@@ -44,9 +44,9 @@ RUN mv /etc/security/limits.conf /etc/security/limits.conf.bak && \
          >> /etc/security/limits.conf
 
 RUN apt update && apt upgrade
-RUN apt install -y git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
+RUN apt install -y vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
                    openssl openssh-server openssh-client \
-                   net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz
+                   net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz systemd
 RUN apt install -y build-essential gdb clang-format clang-tidy clang-tools clang clangd libc++-dev libc++1 \
                    libc++abi-dev libc++abi1 libclang-dev libclang1 liblldb-dev libllvm-ocaml-dev libomp-dev libomp5 \
                    lld lldb llvm-dev llvm-runtime llvm python3-clang nodejs ninja-build
