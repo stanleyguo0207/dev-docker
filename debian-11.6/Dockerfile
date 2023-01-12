@@ -11,22 +11,27 @@ SHELL ["/bin/bash", "-c"]
 RUN echo I am using bash, which is now the default
 
 RUN apt update
-RUN apt install -y wget apt-transport-https ca-certificates gnupg gnupg1 gnupg2
+RUN apt install -y systemd wget apt-transport-https ca-certificates gnupg gnupg1 gnupg2
 
 RUN wget -O - 'https://apt.llvm.org/llvm-snapshot.gpg.key' | apt-key add -
 
 # sources.list
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
     echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free" \
-         $'\n'"deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free" \
+         $'\n'"# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free" \
          $'\n'"deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free" \
-         $'\n'"deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free" \
+         $'\n'"# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free" \
          $'\n' \
          $'\n'"deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free" \
-         $'\n'"deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free" \
+         $'\n'"# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free" \
          $'\n' \
          $'\n'"deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free" \
-         $'\n'"deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free" \
+         $'\n'"# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free" \
+         $'\n' \
+         $'\n'"deb http://mirrors.ustc.edu.cn/debian stable main contrib non-free" \
+         $'\n'"# deb-src http://mirrors.ustc.edu.cn/debian stable main contrib non-free" \
+         $'\n'"deb http://mirrors.ustc.edu.cn/debian stable-updates main contrib non-free" \
+         $'\n'"# deb-src http://mirrors.ustc.edu.cn/debian stable-updates main contrib non-free" \
          $'\n' \
          $'\n'"deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" \
          $'\n'"deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" \
@@ -52,34 +57,34 @@ RUN mv /etc/security/limits.conf /etc/security/limits.conf.bak && \
          >> /etc/security/limits.conf
 
 # hosts
-RUN echo "140.82.112.3"$'\t'"github.com" \
-         $'\n'"140.82.113.3"$'\t'"github.com" \
-         $'\n'"140.82.114.5"$'\t'"api.github.com" \
-         $'\n'"185.199.108.153"$'\t'"github.io" \
-         $'\n'"199.232.69.194"$'\t'"github.global.ssl.fastly.net" \
-         $'\n'"185.199.108.133"$'\t'"raw.github.com" \
-         $'\n'"185.199.108.133"$'\t'"raw.githubusercontent.com" \
-         $'\n'"185.199.109.133"$'\t'"raw.githubusercontent.com" \
-         $'\n'"185.199.110.133"$'\t'"raw.githubusercontent.com" \
-         $'\n'"185.199.111.133"$'\t'"raw.githubusercontent.com" \
-         $'\n'"2606:50c0:8000::154"$'\t'"raw.githubusercontent.com" \
-         $'\n'"2606:50c0:8001::154"$'\t'"raw.githubusercontent.com" \
-         $'\n'"2606:50c0:8002::154"$'\t'"raw.githubusercontent.com" \
-         $'\n'"2606:50c0:8003::154"$'\t'"raw.githubusercontent.com" \
-         $'\n'"185.199.108.153"$'\t'"assets-cdn.github.com" \
-         $'\n'"185.199.109.153"$'\t'"assets-cdn.github.com" \
-         $'\n'"185.199.110.153"$'\t'"assets-cdn.github.com" \
-         $'\n'"185.199.111.153"$'\t'"assets-cdn.github.com" \
-         $'\n'"2606:50c0:8000::153"$'\t'"assets-cdn.github.com" \
-         $'\n'"2606:50c0:8001::153"$'\t'"assets-cdn.github.com" \
-         $'\n'"2606:50c0:8002::153"$'\t'"assets-cdn.github.com" \
-         $'\n'"2606:50c0:8003::153"$'\t'"assets-cdn.github.com" \
-         >> /etc/hosts
+# RUN echo "140.82.112.3"$'\t'"github.com" \
+#          $'\n'"140.82.113.3"$'\t'"github.com" \
+#          $'\n'"140.82.114.5"$'\t'"api.github.com" \
+#          $'\n'"185.199.108.153"$'\t'"github.io" \
+#          $'\n'"199.232.69.194"$'\t'"github.global.ssl.fastly.net" \
+#          $'\n'"185.199.108.133"$'\t'"raw.github.com" \
+#          $'\n'"185.199.108.133"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"185.199.109.133"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"185.199.110.133"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"185.199.111.133"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"2606:50c0:8000::154"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"2606:50c0:8001::154"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"2606:50c0:8002::154"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"2606:50c0:8003::154"$'\t'"raw.githubusercontent.com" \
+#          $'\n'"185.199.108.153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"185.199.109.153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"185.199.110.153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"185.199.111.153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"2606:50c0:8000::153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"2606:50c0:8001::153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"2606:50c0:8002::153"$'\t'"assets-cdn.github.com" \
+#          $'\n'"2606:50c0:8003::153"$'\t'"assets-cdn.github.com" \
+#          >> /etc/hosts
 
 RUN apt update && apt upgrade
 RUN apt install -y curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
                    openssl openssh-server openssh-client \
-                   net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz systemd
+                   net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz
 RUN apt install -y build-essential gdb nodejs ninja-build pkg-config libx11-dev libxft-dev libxext-dev
 RUN apt install -y libllvm-15-ocaml-dev libllvm15 llvm-15 llvm-15-dev llvm-15-doc llvm-15-examples llvm-15-runtime \
                    clang-15 clang-tools-15 clang-15-doc libclang-common-15-dev libclang-15-dev libclang1-15 \
