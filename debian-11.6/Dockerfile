@@ -10,6 +10,9 @@ WORKDIR /root
 SHELL ["/bin/bash", "-c"]
 RUN echo I am using bash, which is now the default
 
+# createuser script
+COPY createuser.sh /root/createuser.sh
+
 RUN apt update
 RUN apt install -y systemd wget apt-transport-https ca-certificates gnupg gnupg1 gnupg2
 
@@ -56,31 +59,6 @@ RUN mv /etc/security/limits.conf /etc/security/limits.conf.bak && \
          $'\n'"root*"$'\t'"hard"$'\t'"nproc"$'\t'"102400" \
          >> /etc/security/limits.conf
 
-# hosts
-# RUN echo "140.82.112.3"$'\t'"github.com" \
-#          $'\n'"140.82.113.3"$'\t'"github.com" \
-#          $'\n'"140.82.114.5"$'\t'"api.github.com" \
-#          $'\n'"185.199.108.153"$'\t'"github.io" \
-#          $'\n'"199.232.69.194"$'\t'"github.global.ssl.fastly.net" \
-#          $'\n'"185.199.108.133"$'\t'"raw.github.com" \
-#          $'\n'"185.199.108.133"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"185.199.109.133"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"185.199.110.133"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"185.199.111.133"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"2606:50c0:8000::154"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"2606:50c0:8001::154"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"2606:50c0:8002::154"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"2606:50c0:8003::154"$'\t'"raw.githubusercontent.com" \
-#          $'\n'"185.199.108.153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"185.199.109.153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"185.199.110.153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"185.199.111.153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"2606:50c0:8000::153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"2606:50c0:8001::153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"2606:50c0:8002::153"$'\t'"assets-cdn.github.com" \
-#          $'\n'"2606:50c0:8003::153"$'\t'"assets-cdn.github.com" \
-#          >> /etc/hosts
-
 RUN apt update && apt upgrade
 RUN apt install -y curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
                    openssl openssh-server openssh-client \
@@ -99,4 +77,9 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak && \
     sed -e 's|#GSSAPIAuthentication no|GSSAPIAuthentication no|g' \
         -e 's|#PubkeyAuthentication yes|PubkeyAuthentication yes|g' \
+        -e 's|#PasswordAuthentication yes|PasswordAuthentication yes|g' \
+        -e '/#PermitRootLogin prohibit-password/a\PermitRootLogin yes' \
         -i /etc/ssh/sshd_config
+
+# root passward
+RUN echo "root:root" | chpasswd
