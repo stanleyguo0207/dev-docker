@@ -23,6 +23,7 @@ function CreateContainer(){
     docker start $2
     docker cp $ScriptDir/createuser.sh $_name:/root
     docker cp $ScriptDir/init.sh $_name:/opt/docker_home
+    docker cp $ToolsDir/gdbinit.tar.gz $_name:/opt/docker_home
     docker exec -it $2 /bin/bash /root/createuser.sh $2 $3
     echo "create root:root accounts for container $1 $2 port:$3"
     echo "create $2:$2 accounts for container $1 $2 port:$3"

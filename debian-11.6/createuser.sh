@@ -23,8 +23,18 @@ if [ ! -d .ssh ]; then
     mkdir .ssh
 fi
 chmod 700 .ssh
-# chown $UserName .ssh
 echo "" >> .ssh/authorized_keys
 chmod 600 .ssh/authorized_keys
-# chown $UserName .ssh/authorized_keys
-chown -R $UserName /opt/docker_home
+
+# tools
+mkdir tools
+mv gdbinit.tar.gz tools
+
+tar -zxf /opt/docker_home/tools/gdbinit.tar.gz -C /opt/docker_home/tools
+mv /opt/docker_home/tools/.gdbinit /opt/docker_home
+mkdir .gdb && mv /opt/docker_home/tools/python /opt/docker_home/.gdb
+
+rm -rf tools
+
+# chown
+chown -R $UserName:$UserName /opt/docker_home

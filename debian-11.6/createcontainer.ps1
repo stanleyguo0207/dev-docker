@@ -11,6 +11,7 @@ if ([string]::IsNullOrEmpty($image) -or [string]::IsNullOrEmpty($name)) {
 }
 
 $ScriptDir = Get-Location
+$ToolsDir = "$ScriptDir\..\tools"
 
 function CreateContainer($_image, $_name, $_port) {
     docker create --name `"$_name`"_dvc -v /opt/docker_home hello-world:latest
@@ -18,6 +19,7 @@ function CreateContainer($_image, $_name, $_port) {
     docker start $_name
     docker cp $ScriptDir\createuser.sh ${_name}:/root
     docker cp $ScriptDir\init.sh ${_name}:/opt/docker_home
+    docker cp $ToolsDir\gdbinit.tar.gz ${_name}:/opt/docker_home
     docker exec -it $_name /bin/bash /root/createuser.sh $_name $_port
     Write-Host "create root:root accounts for container $_image $_name port:$_port"
     Write-Host "create $_name`:$_name accounts for container $_image $_name port:$_port"
