@@ -10,9 +10,6 @@ WORKDIR /root
 SHELL ["/bin/bash", "-c"]
 RUN echo I am using bash, which is now the default
 
-# createuser script
-COPY createuser.sh /root/createuser.sh
-
 RUN apt update
 RUN apt install -y systemd wget apt-transport-https ca-certificates gnupg gnupg1 gnupg2
 
@@ -60,10 +57,10 @@ RUN mv /etc/security/limits.conf /etc/security/limits.conf.bak && \
          >> /etc/security/limits.conf
 
 RUN apt update && apt upgrade
-RUN apt install -y curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
+RUN apt install -y zsh curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
                    openssl openssh-server openssh-client \
                    net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz
-RUN apt install -y build-essential gdb nodejs ninja-build pkg-config libx11-dev libxft-dev libxext-dev
+RUN apt install -y build-essential gdb nodejs ninja-build pkg-config libx11-dev libxft-dev libxext-dev libtool
 RUN apt install -y libllvm-15-ocaml-dev libllvm15 llvm-15 llvm-15-dev llvm-15-doc llvm-15-examples llvm-15-runtime \
                    clang-15 clang-tools-15 clang-15-doc libclang-common-15-dev libclang-15-dev libclang1-15 \
                    clang-format-15 python3-clang-15 clangd-15 clang-tidy-15 libfuzzer-15-dev lldb-15 lld-15 \
@@ -80,6 +77,3 @@ RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak && \
         -e 's|#PasswordAuthentication yes|PasswordAuthentication yes|g' \
         -e '/#PermitRootLogin prohibit-password/a\PermitRootLogin yes' \
         -i /etc/ssh/sshd_config
-
-# root passward
-RUN echo "root:root" | chpasswd
