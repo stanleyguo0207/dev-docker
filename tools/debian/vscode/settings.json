@@ -1,31 +1,37 @@
 {
-    "editor.formatOnSave": true,
-    "editor.rulers": [
+  "editor.formatOnSave": true,
+  "editor.rulers": [
       80,
       120
-    ],
-    "editor.minimap.maxColumn": 80,
-    "[cpp]": {
+  ],
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.minimap.maxColumn": 80,
+  "[cpp]": {
       "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[c]": {
+  },
+  "[c]": {
       "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[proto3]": {
+  },
+  "[proto3]": {
       "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[cmake]": {
+  },
+  "[cmake]": {
       "editor.defaultFormatter": "josetr.cmake-language-support-vscode"
-    },
-    "cmake.configureOnEdit": false,
-    "cmake.configureArgs": [
-      "-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON",
-      "-DCMAKE_TOOLCHAIN_FILE:STRING=/opt/docker_home/git/vcpkg/scripts/buildsystems/vcpkg.cmake"
-    ],
-    "clang-format.executable": "/usr/bin/clang-format-15",
-    "clang-format.fallbackStyle": "Google",
-    "clangd.path": "/usr/bin/clangd-15",
-    "clangd.arguments": [
+  },
+  "cmake.configureOnEdit": false,
+  "cmake.configureArgs": [
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON"
+    //   ,"-DCMAKE_TOOLCHAIN_FILE:STRING=/opt/docker_home/git/vcpkg/scripts/buildsystems/vcpkg.cmake"
+  ],
+  "C_Cpp.autocomplete": "disabled",
+  "C_Cpp.formatting": "disabled",
+  "C_Cpp.errorSquiggles": "disabled",
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "clang-format.executable": "/usr/bin/clang-format-15",
+  "clang-format.fallbackStyle": "Google",
+  "clangd.path": "/usr/bin/clangd-15",
+  "clangd.arguments": [
       // 让 Clangd 生成更详细的日志
       "--log=error",
       // 输出的 JSON 文件更美观
@@ -60,9 +66,8 @@
       "--function-arg-placeholders=false",
       // compelie_commands.json 文件的目录位置(相对于工作区，由于 CMake 生成的该文件默认在 build 文件夹中，故设置为 build)
       "--compile-commands-dir=build"
-    ],
-    "files.exclude": {
+  ],
+  "files.exclude": {
       "**/.git": false
-    },
-  }
-  
+  },
+}
