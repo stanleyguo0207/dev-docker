@@ -56,7 +56,7 @@ RUN mv /etc/security/limits.conf /etc/security/limits.conf.bak && \
          $'\n'"root*"$'\t'"hard"$'\t'"nproc"$'\t'"102400" \
          >> /etc/security/limits.conf
 
-RUN apt update && apt upgrade
+RUN apt update && apt upgrade -y
 RUN apt install -y zsh curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
                    openssl openssh-server openssh-client \
                    net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz
