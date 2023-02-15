@@ -60,7 +60,8 @@ RUN apt update && apt upgrade -y
 RUN apt install -y zsh curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
                    openssl openssh-server openssh-client \
                    net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz
-RUN apt install -y build-essential gdb nodejs ninja-build pkg-config libx11-dev libxft-dev libxext-dev libtool
+RUN apt install -y build-essential gdb nodejs python3 python3-venv python3-pip ninja-build pkg-config libx11-dev \
+                   libxft-dev libxext-dev libtool
 RUN apt install -y libllvm-15-ocaml-dev libllvm15 llvm-15 llvm-15-dev llvm-15-doc llvm-15-examples llvm-15-runtime \
                    clang-15 clang-tools-15 clang-15-doc libclang-common-15-dev libclang-15-dev libclang1-15 \
                    clang-format-15 python3-clang-15 clangd-15 clang-tidy-15 libfuzzer-15-dev lldb-15 lld-15 \

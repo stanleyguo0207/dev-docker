@@ -31,4 +31,4 @@ function CreateContainer(){
 
 CreateContainer $image $name $port
 
-# ./createcontainer.sh dev_debian:11.6 stanley 9901
+# ./createcontainer.sh dev_debian:v11.6 stanley 9901

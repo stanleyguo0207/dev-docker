@@ -1,4 +1,4 @@
-# createcontainer.ps1 -image dev_debian:11.6 -name stanley -port 9901
+# createcontainer.ps1 -image dev_debian:v11.6 -name stanley -port 9901
 param(
     [string]$image = "",
     [string]$name = "",
