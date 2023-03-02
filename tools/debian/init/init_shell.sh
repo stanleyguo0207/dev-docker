@@ -1,5 +1,12 @@
 #!/bin/zsh
 
+# vimrc
+{
+  echo "set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936"
+  echo "set termencoding=utf-8"
+  echo "set encoding=utf-8"
+} >> ~/.vimrc
+
 # oh-my-zsh
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
