@@ -1,24 +1,19 @@
-# type(<scope>): <subject>
-
-# <body>
-
-# <footer>
+#<type>[optional scope]: <description>
+#[optional body]
+#[optional footer(s)]
 
 Signed-off-by: stanleyguo0207 <stanleyguo0207@163.com>
+# https://www.conventionalcommits.org/en/v1.0.0/
 
-# type 字段包含:
-# 	feat：新功能（feature）
-# 	fix：修补bug
-# 	docs：文档（documentation）
-# 	style： 格式（不影响代码运行的变动）
-# 	refactor：重构（即不是新增功能，也不是修改bug的代码变动）
-# 	test：增加测试
-# 	chore：构建过程或辅助工具的变动
+# The commit contains the following structural elements, to communicate intent to the consumers of your library:
 #
-# 	scope用于说明 commit 影响的范围，比如数据层、控制层、视图层等等。
-# 	subject是 commit 目的的简短描述，不超过50个字符
-#
-# body 部分是对本次 commit 的详细描述，可以分成多行
-#
-# footer用来关闭 Issue或以BREAKING CHANGE开头，后面是对变动的描述、
-#       以及变动理由和迁移方法
+# fix: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in Semantic Versioning).
+# feat: a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in Semantic Versioning).
+# BREAKING CHANGE: a commit that has a footer BREAKING CHANGE:, or appends a ! after the type/scope, introduces a
+# breaking API change (correlating with MAJOR in Semantic Versioning). A BREAKING CHANGE can be part of commits of any type.
+# types other than fix: and feat: are allowed, for example @commitlint/config-conventional (based on the Angular
+# convention) recommends build:, chore:, ci:, docs:, style:, refactor:, perf:, test:, and others.
+# footers other than BREAKING CHANGE: <description> may be provided and follow a convention similar to git trailer format.
+# Additional types are not mandated by the Conventional Commits specification, and have no implicit effect in Semantic Versioning
+# (unless they include a BREAKING CHANGE). A scope may be provided to a commit’s type, to provide additional contextual
+# information and is contained within parenthesis, e.g., feat(parser): add ability to parse arrays.

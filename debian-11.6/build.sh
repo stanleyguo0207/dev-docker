@@ -1,9 +1,8 @@
 #!/bin/bash
 
-if [ $# != 1 ]
-then
-    echo "Usage: build.sh [image_name:tag_name]"
-    exit 1
+if [ $# != 1 ]; then
+  echo "Usage: build.sh [image_name:tag_name]"
+  exit 1
 fi
 
 docker login
