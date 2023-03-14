@@ -60,7 +60,7 @@ RUN mv /etc/security/limits.conf /etc/security/limits.conf.bak && \
 
 RUN apt update && apt upgrade -y
 RUN apt install -y zsh curl vim git git-lfs cmake autoconf automake sudo passwd tmux htop texinfo doxygen \
-                   openssl openssh-server openssh-client \
+                   openssl openssh-server openssh-client locales locales-all \
                    net-tools rsync tar bzip2 zip unzip lrzsz lsof telnet graphviz
 RUN apt install -y build-essential gdb nodejs python3 python3-venv python3-pip ninja-build pkg-config libx11-dev \
                    libxft-dev libxext-dev libtool
