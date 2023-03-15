@@ -3,8 +3,6 @@ FROM debian:11.6
 
 # expose port
 EXPOSE 22
-# expose port range
-EXPOSE 19900-19920
 
 # work directory /root
 WORKDIR /root
