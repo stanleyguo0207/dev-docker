@@ -7,6 +7,7 @@ Docker Development Environment
 /
 ├── backup            # 备份
 ├── debian-11.6       # debian v11.6 docker脚本
+├── gamemaster        # gamemaster docker脚本
 └── tools             # docker创建需要的工具
 ```
 
