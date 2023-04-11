@@ -32,7 +32,6 @@ RUN set -ex; \
   echo "root*   soft    nproc   102400" >> /etc/security/limits.conf; \
   echo "root*   hard    nproc   102400" >> /etc/security/limits.conf;
 
-
 RUN set -ex; \
   apt update; \
   apt upgrade -y;
