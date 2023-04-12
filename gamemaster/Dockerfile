@@ -1,12 +1,11 @@
 FROM gcc:12-bullseye
 
 RUN set -ex; \
-  apt update;
-
-RUN set -ex; \
-  wget -O - 'https://apt.llvm.org/llvm-snapshot.gpg.key' | apt-key add -;
-
-RUN set -ex; \
+  # update
+  apt update; \
+  # llvm gpg
+  wget -O - 'https://apt.llvm.org/llvm-snapshot.gpg.key' | apt-key add -; \
+  # sources.list
   mv /etc/apt/sources.list /etc/apt/sources.list.bak; \
   echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free" >> /etc/apt/sources.list; \
   echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free" >> /etc/apt/sources.list; \
@@ -15,29 +14,13 @@ RUN set -ex; \
   echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list; \
   echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list; \
   echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-16 main" >> /etc/apt/sources.list; \
-  echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-16 main" >> /etc/apt/sources.list;
-
-RUN set -ex; \
-  mv /etc/security/limits.conf /etc/security/limits.conf.bak; \
-  echo "*       soft    core    unlimited" >> /etc/security/limits.conf; \
-  echo "*       hard    core    unlimited" >> /etc/security/limits.conf; \
-  echo "*       soft    nofile  1048576" >> /etc/security/limits.conf; \
-  echo "*       hard    nofile  1048576" >> /etc/security/limits.conf; \
-  echo "*       soft    nproc   102400" >> /etc/security/limits.conf; \
-  echo "*       hard    nproc   102400" >> /etc/security/limits.conf; \
-  echo "root*   soft    core    unlimited" >> /etc/security/limits.conf; \
-  echo "root*   hard    core    unlimited" >> /etc/security/limits.conf; \
-  echo "root*   soft    nofile  1048576" >> /etc/security/limits.conf; \
-  echo "root*   hard    nofile  1048576" >> /etc/security/limits.conf; \
-  echo "root*   soft    nproc   102400" >> /etc/security/limits.conf; \
-  echo "root*   hard    nproc   102400" >> /etc/security/limits.conf;
-
-RUN set -ex; \
+  echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-16 main" >> /etc/apt/sources.list; \
+  # update
   apt update; \
-  apt upgrade -y;
-
-RUN set -ex; \
+  apt upgrade -y; \
+  # software
   apt install -y --no-install-recommends \
+  init \
   systemd \
   zsh \
   curl \
@@ -117,12 +100,24 @@ RUN set -ex; \
   libc++-16-dev-wasm32 \
   libc++abi-16-dev-wasm32 \
   libclang-rt-16-dev-wasm32 \
-  libclang-rt-16-dev-wasm64;
-
-RUN set -ex; \
-  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime;
-
-RUN set -ex; \
+  libclang-rt-16-dev-wasm64; \
+  # limits.conf
+  mv /etc/security/limits.conf /etc/security/limits.conf.bak; \
+  echo "*       soft    core    unlimited" >> /etc/security/limits.conf; \
+  echo "*       hard    core    unlimited" >> /etc/security/limits.conf; \
+  echo "*       soft    nofile  1048576" >> /etc/security/limits.conf; \
+  echo "*       hard    nofile  1048576" >> /etc/security/limits.conf; \
+  echo "*       soft    nproc   102400" >> /etc/security/limits.conf; \
+  echo "*       hard    nproc   102400" >> /etc/security/limits.conf; \
+  echo "root*   soft    core    unlimited" >> /etc/security/limits.conf; \
+  echo "root*   hard    core    unlimited" >> /etc/security/limits.conf; \
+  echo "root*   soft    nofile  1048576" >> /etc/security/limits.conf; \
+  echo "root*   hard    nofile  1048576" >> /etc/security/limits.conf; \
+  echo "root*   soft    nproc   102400" >> /etc/security/limits.conf; \
+  echo "root*   hard    nproc   102400" >> /etc/security/limits.conf; \
+  # localtime
+  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
+  # sshd_config
   sed -e 's|#GSSAPIAuthentication no|GSSAPIAuthentication no|g' \
   -e 's|#PubkeyAuthentication yes|PubkeyAuthentication yes|g' \
   -e 's|#PasswordAuthentication yes|PasswordAuthentication yes|g' \
