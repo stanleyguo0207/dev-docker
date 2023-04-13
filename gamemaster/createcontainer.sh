@@ -17,8 +17,7 @@ name="$2"
 port=$3
 
 function CreateContainer() {
-  docker create --name "$2"_dvc -v /opt/docker_home hello-world:latest
-  docker create --name "$2" --volumes-from "$2"_dvc -p "$3":22 --security-opt seccomp=unconfined --privileged=true --restart=always "$1" /sbin/init
+  docker create --name "$2" -p "$3":22 --security-opt seccomp=unconfined --privileged=true --restart=always "$1" /sbin/init
   docker start $2
   echo "create root:root accounts for container $1 $2 port:$3"
   echo "create $2:$2 accounts for container $1 $2 port:$3"

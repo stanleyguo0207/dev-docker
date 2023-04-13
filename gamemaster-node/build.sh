@@ -10,5 +10,5 @@ docker pull hello-world:latest
 docker pull node:18.15-bullseye
 docker build --network=host --no-cache -f Dockerfile -t $1 .
 
-# ./build.sh gamemaster:1.0
-# docker run -it gamemaster:1.0 /bin/bash
+# ./build.sh gamemaster-node:1.0
+# docker run -it gamemaster-node:1.0 /bin/bash
