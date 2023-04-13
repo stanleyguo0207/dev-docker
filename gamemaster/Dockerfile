@@ -1,5 +1,7 @@
 FROM gcc:12-bullseye
 
+USER root
+
 RUN set -ex; \
   # update
   apt update; \
@@ -123,3 +125,37 @@ RUN set -ex; \
   -e 's|#PasswordAuthentication yes|PasswordAuthentication yes|g' \
   -e '/#PermitRootLogin prohibit-password/a\PermitRootLogin yes' \
   -i /etc/ssh/sshd_config;
+
+ENV GAMEMASTER_HOME /opt/docker_home
+RUN set -ex; \
+  mkdir -p $GAMEMASTER_HOME; \
+  cp -R /etc/skel/. $GAMEMASTER_HOME; \
+  groupadd -r -g 1024 gamemaster; \
+  useradd -r -d $GAMEMASTER_HOME -s $(which zsh) -g gamemaster -u 1024 gamemaster;\
+  usermod -aG sudo gamemaster;
+
+VOLUME /opt/docker_home
+ADD gamemaster-init.tar.gz /opt/docker_home
+RUN set -ex; \
+  chown -R gamemaster:gamemaster $GAMEMASTER_HOME;
+
+USER gamemaster
+WORKDIR /opt/docker_home
+
+RUN set -ex; \
+  mkdir -p .ssh; \
+  chmod 700 .ssh; \
+  echo "" >> .ssh/authorized_keys; \
+  chmod 600 .ssh/authorized_keys; \
+  echo "set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936" >> .vimrc; \
+  echo "set termencoding=utf-8" >> .vimrc; \
+  echo "set encoding=utf-8" >> .vimrc; \
+  sh install-ohmyzsh.sh --unattended; \
+  rm -f install-ohmyzsh.sh; \
+  mv powerlevel10k .oh-my-zsh/custom/themes/powerlevel10k;\
+  sed -e 's|ZSH_THEME="robbyrussell"|ZSH_THEME="powerlevel10k/powerlevel10k"|g' -i .zshrc; \
+  mkdir -p .vscode-server/data/Machine; \
+  mv settings.json .vscode-server/data/Machine/;
+
+USER root
+WORKDIR /root
